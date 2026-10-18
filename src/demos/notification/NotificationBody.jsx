@@ -1,9 +1,14 @@
+import { notificationStyles } from "./notificationStyles";
+
 export default function NotificationBody({ onClose }) {
   return (
-    <div className="notification-body" role="status">
-      <span className="notification-icon" aria-hidden="true">✓</span>
-      <span><strong>Changes saved</strong><small>Your preferences are up to date.</small></span>
-      <button type="button" onClick={onClose} aria-label="Close notification">×</button>
+    <div style={notificationStyles.body} role="status">
+      <span style={notificationStyles.icon} aria-hidden="true">✓</span>
+      <span style={notificationStyles.message}>
+        <strong style={notificationStyles.title}>Changes saved</strong>
+        <small style={notificationStyles.detail}>Your preferences are up to date.</small>
+      </span>
+      <button style={notificationStyles.closeButton} type="button" onClick={onClose} aria-label="Close notification">×</button>
     </div>
   );
 }
