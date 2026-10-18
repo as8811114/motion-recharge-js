@@ -14,10 +14,9 @@ export default function DemoLayout() {
             <span className="eyebrow">React animation comparison</span>
             <h1>CSS vs Motion</h1>
           </div>
-          <p>Same interaction, two implementations.</p>
         </header>
         <nav className="demo-nav" aria-label="Demo navigation">
-          {demos.map((demo) => (
+          {demos.filter((demo) => !demo.hidden).map((demo) => (
             <NavLink key={demo.path} to={demo.path} className={({ isActive }) => `demo-nav-item${isActive ? " selected" : ""}`}>
               <span>{demo.number}</span><strong>{demo.title}</strong>
             </NavLink>
@@ -31,7 +30,6 @@ export default function DemoLayout() {
           </div>
           <Outlet />
         </main>
-        <footer>React state drives both examples. Only the animation coordination differs.</footer>
       </div>
     </MotionConfig>
   );

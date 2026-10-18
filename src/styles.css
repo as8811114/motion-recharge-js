@@ -51,7 +51,6 @@ pre { max-height: 680px; margin: 0; overflow: auto; color: #d7deea; font: 12px/1
 .code-tag { color: #f07178; }
 .code-selector { color: #82aaff; }
 .code-property { color: #89ddff; }
-footer { margin-top: 32px; text-align: center; color: #7b8699; font-size: 12px; }
 @media (max-width: 760px) {
   .app-shell { width: min(100% - 24px, 1180px); padding-top: 20px; }
   .site-header { align-items: start; flex-direction: column; gap: 8px; }
