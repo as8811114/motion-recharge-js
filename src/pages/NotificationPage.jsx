@@ -1,12 +1,8 @@
 import CodeDetails from "../components/CodeDetails";
 import CssNotification from "../demos/notification/CssNotification";
 import MotionNotification from "../demos/notification/MotionNotification";
-import CssNotificationStack from "../demos/notification/CssNotificationStack";
-import MotionNotificationStack from "../demos/notification/MotionNotificationStack";
 import cssSource from "../demos/notification/CssNotification.jsx?raw";
 import motionSource from "../demos/notification/MotionNotification.jsx?raw";
-import cssStackSource from "../demos/notification/CssNotificationStack.jsx?raw";
-import motionStackSource from "../demos/notification/MotionNotificationStack.jsx?raw";
 import bodySource from "../demos/notification/NotificationBody.jsx?raw";
 import stylesSource from "../demos/notification/notificationStyles.js?raw";
 
@@ -15,37 +11,34 @@ export default function NotificationPage() {
     <div className="page-stack">
       <section className="section-card">
         <div className="section-heading">
-          <h3>Demo A: Single Notification</h3>
-          <p>A focused comparison of one exit animation and the moment its DOM node can be removed.</p>
+          <h3>Single Notification</h3>
+          <p>同一個退出效果，分別以 Inline Styles 與 Motion 實作。</p>
         </div>
-        <div className="compare-grid"><CssNotification /><MotionNotification /></div>
+        <div className="compare-grid">
+          <CssNotification />
+          <MotionNotification />
+        </div>
       </section>
-      <CodeDetails defaultOpen sections={[
-        { title: "CssNotification.jsx - Single", code: cssSource },
-        { title: "MotionNotification.jsx - Single", code: motionSource },
-      ]} />
 
-      <section className="section-card">
-        <div className="section-heading">
-          <h3>Notification Stack — Managing Multiple Exits</h3>
-          <p>Five independent timers, simultaneous exits, and smooth reflow after a middle item is dismissed.</p>
-        </div>
-        <div className="compare-grid"><CssNotificationStack /><MotionNotificationStack /></div>
-      </section>
       <div className="compare-note">
-        <p><strong>React + Inline Styles:</strong> each item keeps an exit state; transition completion controls data removal; an animated Grid row collapses height so neighboring items fill the space smoothly.</p>
-        <p><strong>Motion:</strong> <code>AnimatePresence</code> manages multiple exiting nodes, while <code>layout</code> moves the remaining items as the <code>items</code> array changes.</p>
-        <p>CSS can produce the same result without a FLIP implementation. Motion becomes more useful when several independently timed elements enter, exit, and reflow together; both versions still need React State and timers.</p>
+        <p><strong>React + Inline Styles：</strong>先設定 exiting 觸發 CSS Transition，再由 onTransitionEnd 呼叫 setMounted(false)。</p>
+        <p><strong>React + Motion：</strong>設定 visible 為 false，AnimatePresence 會先播放 exit，再移除 DOM。</p>
+        <p>兩邊都可以輕鬆做到單一通知退出；Motion 主要省下退出動畫與元件卸載的手動協調。</p>
       </div>
-      <CodeDetails sections={[
-        { title: "CssNotificationStack.jsx", code: cssStackSource },
-        { title: "MotionNotificationStack.jsx", code: motionStackSource },
-      ]} />
-      <CodeDetails sections={[
-        { title: "NotificationBody.jsx - Shared", code: bodySource },
-        { title: "notificationStyles.js - Shared", code: stylesSource },
-      ]} />
 
+      <CodeDetails
+        defaultOpen
+        sections={[
+          { title: "CssNotification.jsx", code: cssSource },
+          { title: "MotionNotification.jsx", code: motionSource },
+        ]}
+      />
+      <CodeDetails
+        sections={[
+          { title: "NotificationBody.jsx - Shared", code: bodySource },
+          { title: "notificationStyles.js - Shared", code: stylesSource },
+        ]}
+      />
     </div>
   );
 }

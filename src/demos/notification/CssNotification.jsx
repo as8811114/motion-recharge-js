@@ -1,69 +1,67 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import NotificationBody from "./NotificationBody";
 import { notificationStyles } from "./notificationStyles";
 
 const HOLD_MS = 3000;
-const EXIT_MS = 300;
 
 export default function CssNotification() {
   const [mounted, setMounted] = useState(false);
-  const [entered, setEntered] = useState(false);
   const [exiting, setExiting] = useState(false);
-  const autoCloseTimer = useRef(null);
-  const exitFallback = useRef(null);
-  const enterFrame = useRef(null);
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const finishExit = () => {
-    window.clearTimeout(exitFallback.current);
-    setMounted(false);
+  const show = () => {
+    setMounted(true);
     setExiting(false);
   };
 
   const hide = () => {
-    window.clearTimeout(autoCloseTimer.current);
     setExiting(true);
-    exitFallback.current = window.setTimeout(finishExit, reducedMotion ? 0 : EXIT_MS + 80);
   };
 
-  const show = () => {
-    window.clearTimeout(autoCloseTimer.current);
-    window.clearTimeout(exitFallback.current);
-    cancelAnimationFrame(enterFrame.current);
-    setMounted(true);
-    setEntered(false);
+  const finishExit = () => {
+    setMounted(false);
     setExiting(false);
-    enterFrame.current = requestAnimationFrame(() => setEntered(true));
-    autoCloseTimer.current = window.setTimeout(hide, HOLD_MS);
   };
 
-  useEffect(() => () => {
-    window.clearTimeout(autoCloseTimer.current);
-    window.clearTimeout(exitFallback.current);
-    cancelAnimationFrame(enterFrame.current);
-  }, []);
+  useEffect(() => {
+    if (!mounted) return undefined;
 
-  const active = entered && !exiting;
-  const phase = !mounted ? "Unmounted" : exiting ? "Exiting" : entered ? "Visible" : "Entering";
+    if (exiting && reducedMotion) {
+      const timer = window.setTimeout(finishExit, 0);
+      return () => window.clearTimeout(timer);
+    }
+
+    if (exiting) return undefined;
+
+    const timer = window.setTimeout(hide, HOLD_MS);
+    return () => window.clearTimeout(timer);
+  }, [mounted, exiting, reducedMotion]);
 
   return (
     <article className="demo-panel">
-      <div className="panel-heading"><h3>React + Inline Styles</h3><code>exiting + transitionend</code></div>
+      <div className="panel-heading">
+        <h3>React + Inline Styles</h3>
+        <code>exiting + transitionend</code>
+      </div>
       <div className="demo-stage" style={notificationStyles.stage}>
         <div style={notificationStyles.mockWindow}>
-          <span style={notificationStyles.mockDot} /><span style={notificationStyles.mockDot} /><span style={notificationStyles.mockDot} />
+          <span style={notificationStyles.mockDot} />
+          <span style={notificationStyles.mockDot} />
+          <span style={notificationStyles.mockDot} />
           <p style={notificationStyles.mockText}>Single notification preview</p>
         </div>
         {mounted && (
           <div
             style={{
               ...notificationStyles.container,
-              opacity: active ? 1 : 0,
-              transform: active ? "translateY(0)" : "translateY(-20px)",
-              transition: reducedMotion || !entered ? "none" : `opacity ${EXIT_MS}ms ease, transform ${EXIT_MS}ms ease`,
+              opacity: exiting ? 0 : 1,
+              transform: exiting ? "translateY(-20px)" : "translateY(0)",
+              transition: reducedMotion ? "none" : "opacity 0.3s, transform 0.3s",
             }}
             onTransitionEnd={(event) => {
-              if (exiting && event.target === event.currentTarget && event.propertyName === "opacity") finishExit();
+              if (exiting && event.target === event.currentTarget && event.propertyName === "opacity") {
+                finishExit();
+              }
             }}
           >
             <NotificationBody onClose={hide} />
@@ -71,9 +69,8 @@ export default function CssNotification() {
         )}
       </div>
       <div className="controls">
-        <button className="button" type="button" onClick={show}>Show / Restart</button>
+        <button className="button" type="button" onClick={show} disabled={mounted}>Show</button>
         <button className="button secondary" type="button" onClick={hide} disabled={!mounted || exiting}>Close Now</button>
-        <div style={notificationStyles.lifecycle}><span style={notificationStyles.statusText}><i style={notificationStyles.statusDot} />{phase}</span><span style={notificationStyles.timing}>timer 3s · exit 0.3s</span></div>
       </div>
     </article>
   );
