@@ -32,6 +32,7 @@ function HighlightedCode({ children }) {
 
 export default function CodeDetails({ sections, defaultOpen = false }) {
   const [copiedTitle, setCopiedTitle] = useState("");
+  const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const copyCode = async (title, code) => {
     try {
@@ -52,7 +53,7 @@ export default function CodeDetails({ sections, defaultOpen = false }) {
   };
 
   return (
-    <details className="code-details" defaultOpen={defaultOpen}>
+    <details className="code-details" open={isOpen} onToggle={(event) => setIsOpen(event.currentTarget.open)}>
       <summary>View core implementation</summary>
       <div className="code-grid">
         {sections.map(({ title, code }) => (
