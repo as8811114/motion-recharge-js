@@ -1,0 +1,27 @@
+.layout-example { min-width: 0; padding: 16px; border: 1px solid #e0e5ed; border-radius: 12px; background: #f8fafc; }
+.expand-stack { min-height: 315px; padding: 15px; border-radius: 10px; background: #e9eef5; }
+.expand-card { padding: 18px; border-radius: 12px; background: white; box-shadow: 0 8px 20px #25334a14; }
+.expand-card > strong { display: block; font-size: 16px; }
+.expand-card p, .expand-copy li { color: #647087; font-size: 12px; line-height: 1.55; }
+.expand-copy ul { margin: 8px 0 14px; padding-left: 18px; }
+.following-note { margin-top: 10px; padding: 12px; border: 1px dashed #bdc7d6; border-radius: 8px; color: #69758a; background: #f8fafc; font-size: 11px; }
+.css-expander { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s ease, opacity .25s ease; }
+.css-expander > div { min-height: 0; overflow: hidden; }
+.css-expander.open { grid-template-rows: 1fr; opacity: 1; }
+.controls select { margin-left: 6px; padding: 6px; border: 1px solid #cad2df; border-radius: 6px; background: white; }
+.tab-frame { padding: 15px; border-radius: 10px; background: #e9eef5; }
+.tabs-list { position: relative; display: flex; align-items: end; gap: 18px; border-bottom: 1px solid #c9d1dc; }
+.tabs-list button { position: relative; flex: none; padding: 8px 0 12px; border: 0; color: #69758a; background: transparent; font-size: 12px; white-space: nowrap; }
+.tabs-list button.active { color: #172238; font-weight: 800; }
+.css-tab-indicator { position: absolute; bottom: -1px; left: 0; height: 3px; border-radius: 3px; background: #17725e; transition: transform .3s ease, width .3s ease; }
+.motion-tab-indicator { position: absolute; right: 0; bottom: -1px; left: 0; height: 3px; border-radius: 3px; background: #17725e; }
+.tab-copy { min-height: 130px; margin-top: 14px; padding: 16px; border-radius: 8px; background: white; }
+.tab-copy h4 { margin: 8px 0; }
+.tab-copy p { margin: 0; color: #69758a; font-size: 12px; }
+.accordion-list { display: grid; gap: 8px; min-height: 250px; align-content: start; }
+.accordion-item { overflow: hidden; border: 1px solid #d8dfe8; border-radius: 9px; background: white; }
+.accordion-item > button { display: flex; width: 100%; justify-content: space-between; padding: 13px 14px; border: 0; color: #27334a; background: white; font-weight: 750; text-align: left; }
+.accordion-item p { margin: 0; padding: 0 14px 14px; color: #68758a; font-size: 12px; line-height: 1.55; }
+.motion-accordion-copy { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .css-expander, .css-tab-indicator { transition-duration: .01ms; } }
+@media (max-width: 500px) { .tabs-list { gap: 10px; overflow-x: auto; } .tabs-list button { font-size: 11px; } }
